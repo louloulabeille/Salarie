@@ -14,7 +14,7 @@ namespace SalarieDII
         private DateTime _dateNaissance;
 
         public const string _patternMatricule = @"^\d{2}[A-Z]{3}\d{2}$";
-        public const string _patternNom = @"[A-Za-z]{3,30}?";
+        public const string _patternNom = @"[a-zA-Z][a-zA-Z]";
 
         public string Matricule { get => _matricule;
             set
@@ -59,6 +59,7 @@ namespace SalarieDII
             Regex rgx = new Regex(_patternMatricule);
             return rgx.IsMatch(mat);
         }
+
         /// <summary>
         /// verifie si le nom a entre 3 et 30 caractères
         /// et non numérique. Voir la constante _patternNom
