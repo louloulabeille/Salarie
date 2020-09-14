@@ -7,13 +7,13 @@ namespace SalarieDII
         static void Main(string[] args)
         {
             Salarie personne = new Salarie();
-            personne.Matricule = "15APG34";
-            personne.Nom = "lo4ulou";
+            personne.Matricule = "14APG44";
+            personne.Nom = "lLujy0";
             personne.Prenom = "l'abeille";
             personne.SalaireBrut = 3000.00;
             personne.TauxCS = 25.00;
 
-            Console.WriteLine(personne.SalaireNet);
+            Console.WriteLine($"Matricule :{personne.Matricule} \nNom :{personne.Nom}");
         }
 
          
