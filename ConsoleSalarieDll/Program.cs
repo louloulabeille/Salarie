@@ -1,6 +1,7 @@
 ﻿using System;
+using SalarieDII;
 
-namespace SalarieDII
+namespace ConsoleSalarieDll
 {
     class Program
     {
@@ -13,22 +14,12 @@ namespace SalarieDII
             personne.SalaireBrut = 3000.00;
             personne.TauxCS = 0.45;
             personne.DateNaissance = new DateTime(1900,1,1);
-
             Console.WriteLine($"Salarié : {personne.Matricule} | nom : {personne.Nom} | prénom : {personne.Prenom}");
+
         }
 
          
     }
-    /// <summary>
-    /// classe qui va tester la classe Salarie
-    /// </summary>
-    class SalarieTest
-    {
-        static void Main(string[] args)
-        {
 
-        }
-
-    }
 
 }
