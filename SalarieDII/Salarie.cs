@@ -10,15 +10,15 @@ namespace SalarieDII
         private string _matricule;
         private string _nom;
         private string _prenom;
-        private double _salaireBrut;
-        private double _tauxCS;         // -- taux cotisation sociale
+        private decimal _salaireBrut;
+        private decimal _tauxCS;         // -- taux cotisation sociale
         private DateTime _dateNaissance;
-        public static int _compteur;   // compteur d'instance
+        private static int _compteur;   // compteur d'instance
 
         public const string _patternMatricule = @"^\d{2}[A-Z]{3}\d{2}$";
         public const string _patternNom = @"^[A-Za-z]{3,30}?$";
-        public const double _maxTaux = 0.60;
-        public const double _minTaux = 0.0;
+        public const decimal _maxTaux = 0.60m;
+        public const decimal _minTaux = 0.0m;
         public const int _anneeMin = -15;
 
 
@@ -42,7 +42,7 @@ namespace SalarieDII
             }
             else
             {
-                throw new ApplicationException(string.Format("Impossible de faire une copie de l'objet passé en paramètre du constructeur."));
+                throw new Exception(string.Format("Impossible de faire une copie de l'objet passé en paramètre du constructeur."));
             }
         }
         /// <summary>
@@ -64,59 +64,62 @@ namespace SalarieDII
             this.Nom = n;
             this.Prenom = p;
             this.Matricule = m;
-            this.SalaireBrut = 0.0;
-            this.TauxCS = 0.0;
+            this.SalaireBrut = 0.0m;
+            this.TauxCS = 0.0m;
             this.DateNaissance = this.InitDateDeNaissance();
             _compteur++;
         }
 
         ~Salarie()
         {
-            _compteur--;
-            Console.WriteLine($"Nb instance dans le destructeur :{Salarie._compteur}");
-            GC.Collect();
-            System.Threading.Thread.Sleep(500); // va mettre en pause le programme de 500 milliseconde
-            
+            _compteur--;            
         }
 
         public string Matricule { get => this._matricule;
             set
             {
-                _matricule = isVerifMatricule(value) ? value : throw new ApplicationException(string.Format($"La saisie du matricule est incorect, il doit être de forme '12DFG15' et vous avez saisie '{value}'. "));
+                this._matricule = isVerifMatricule(value) ? value : throw new Exception(string.Format($"La saisie du matricule est incorect, il doit être de forme '12DFG15' et vous avez saisie '{value}'. "));
             }
         }
 
         public string Nom { get => this._nom;
             set
             {
-                _nom = isVerifNomPrenom(value) ? value : throw new ApplicationException(string.Format($"La saisie du nom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
+                this._nom = isVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du nom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
         public string Prenom { get => this._prenom;
             set
             {
-                _prenom = isVerifNomPrenom(value) ? value : throw new ApplicationException(string.Format($"La saisie du prénom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
+                this._prenom = isVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du prénom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
-        public double SalaireBrut { get => this._salaireBrut; set => this._salaireBrut = value; }
-        public double TauxCS { get => this._tauxCS;
+        public decimal SalaireBrut { get => this._salaireBrut; set => this._salaireBrut = value; }
+        public decimal TauxCS { get => this._tauxCS;
             set
             {
-                _tauxCS = isVerifTaux( value )? value: throw new ApplicationException(string.Format($"La saisie du taux est invalide, il doit être compris entre {_minTaux} et {_maxTaux}."));
+                this._tauxCS = isVerifTaux( value )? value: throw new Exception(string.Format($"La saisie du taux est invalide, il doit être compris entre {_minTaux} et {_maxTaux}."));
             }
         }
         public DateTime DateNaissance { get => this._dateNaissance;
             set
             {
-                _dateNaissance = isVerifDateNaissance(value) ? value : throw new ApplicationException(string.Format("La date est incorrecte, elle doit être supérieur à 01/01/1900 et inférieur de 15 ans à la date du jour"));
+                this._dateNaissance = isVerifDateNaissance(value) ? value : throw new Exception(string.Format("La date est incorrecte, elle doit être supérieur à 01/01/1900 et inférieur de 15 ans à la date du jour"));
             }
         
         }
-        public double SalaireNet {      // calcul du salaire Nets
+        public decimal SalaireNet {      // calcul du salaire Nets
             get
             {
                 return CalculSalaireNet();
             }
+        }
+
+        public static int Compteur { 
+            get
+            {
+                return Salarie._compteur;
+            }    
         }
 
 
@@ -124,9 +127,9 @@ namespace SalarieDII
         /// Calcul du salaire net avec l'aide du salaire brute et du taux
         /// </summary>
         /// <returns></returns>
-        private double CalculSalaireNet ()
+        private decimal CalculSalaireNet ()
         {
-            return _salaireBrut - ((_salaireBrut *(_tauxCS*100))/100);
+            return this._salaireBrut  * (1-this.TauxCS);
         }
 
         /// <summary>
@@ -158,7 +161,7 @@ namespace SalarieDII
         /// </summary>
         /// <param name="taux"> taux à vérifier</param>
         /// <returns></returns>
-        public static bool isVerifTaux ( double taux )
+        public static bool isVerifTaux ( decimal taux )
         {
             return taux >= _minTaux & taux <= _maxTaux;
         }
