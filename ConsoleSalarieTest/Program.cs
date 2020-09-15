@@ -44,8 +44,8 @@ namespace ConsoleSalarieTest
             personne.Matricule = "15AMG34";
             personne.Nom = "loulou";
             personne.Prenom = "labeille";
-            personne.SalaireBrut = 3000.00;
-            personne.TauxCS = 0.45;
+            personne.SalaireBrut = 3000.00m;
+            personne.TauxCS = 0.45m;
             personne.DateNaissance = new DateTime(1900, 1, 1);
             Object j = new object();
 
@@ -57,13 +57,35 @@ namespace ConsoleSalarieTest
             */
 
             //
-            Salarie personne = new Salarie("loulou","labeille","45HGF45");
+            Salarie personne, personne2,personne3 = null;
+
+            try
+            {
+                personne = new Salarie("loulou", "labeille", "45HGF45");
+                personne.SalaireBrut = 2500.00m;
+                personne.TauxCS = 0.2m;
+                personne2 = new Salarie(personne);
+                personne3 = new Salarie("coucou","houhou","81GFD12");
+
+            } catch ( Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            /*
             Console.WriteLine($"Nom de la personne {personne.Nom}");
             Console.WriteLine($"taux de la personne {personne.TauxCS}");
             Console.WriteLine($"date de naissance {personne.DateNaissance}");
-            Salarie personne2 = new Salarie(personne);
+            */
+            Console.WriteLine($"Nb instance :{Salarie.Compteur}");
+            Console.ReadLine();
             personne2 = null;
-            Console.WriteLine($"Nb instance après le passage du garbage collector :{Salarie._compteur}");
+            personne3 = null;
+            Console.WriteLine($"Nb instance avant le passage du garbage collector :{Salarie.Compteur}");
+            Console.ReadLine();
+            GC.Collect();
+            System.Threading.Thread.Sleep(500); // va mettre en pause le programme de 500 milliseconde
+            Console.WriteLine($"Nb instance après le passage du garbage collector:{Salarie.Compteur}");
+            Console.ReadLine();
 
         }
     }
