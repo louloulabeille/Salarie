@@ -14,42 +14,42 @@ namespace SalarieDII
         private DateTime _dateNaissance;
 
         public const string _patternMatricule = @"^\d{2}[A-Z]{3}\d{2}$";
-        public const string _patternNom = @"[A-Za-z]{3,30}?";
+        public const string _patternNom = @"^[A-Za-z]{3,30}?$";
         public const double _maxTaux = 0.60;
         public const double _minTaux = 0.0;
         public const int _anneeMin = -15;
         
 
-        public string Matricule { get => _matricule;
+        public string Matricule { get => this._matricule;
             set
             {
-                _matricule = isVerifMatricule(value) ? value : throw new Exception(string.Format($"La saisie du matricule est incorect, il doit être de forme '12DFG15' et vous avez saisie '{value}'. "));
+                this._matricule = isVerifMatricule(value) ? value : throw new ApplicationException(string.Format($"La saisie du matricule est incorect, il doit être de forme '12DFG15' et vous avez saisie '{value}'. "));
             }
         }
 
-        public string Nom { get => _nom;
+        public string Nom { get => this._nom;
             set
             {
-                _nom = isVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du nom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
+                this._nom = isVerifNomPrenom(value) ? value : throw new ApplicationException(string.Format($"La saisie du nom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
-        public string Prenom { get => _prenom;
+        public string Prenom { get => this._prenom;
             set
             {
-                _prenom = isVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du prénom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
+                this._prenom = isVerifNomPrenom(value) ? value : throw new ApplicationException(string.Format($"La saisie du prénom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
-        public double SalaireBrut { get => _salaireBrut; set => _salaireBrut = value; }
-        public double TauxCS { get => _tauxCS;
+        public double SalaireBrut { get => this._salaireBrut; set => this._salaireBrut = value; }
+        public double TauxCS { get => this._tauxCS;
             set
             {
-                _tauxCS = isVerifTaux( value )? value: throw new Exception(string.Format($"La saisie du taux est invalide, il doit être compris entre {_minTaux} et {_maxTaux}."));
+                this._tauxCS = isVerifTaux( value )? value: throw new ApplicationException(string.Format($"La saisie du taux est invalide, il doit être compris entre {_minTaux} et {_maxTaux}."));
             }
         }
-        public DateTime DateNaissance { get => _dateNaissance;
+        public DateTime DateNaissance { get => this._dateNaissance;
             set
             {
-                _dateNaissance = isVerifDateNaissance(value) ? value : throw new Exception(string.Format("La date est incorrecte, elle doit être supérieur à 01/01/1900 et inférieur de 15 ans à la date du jour"));
+                this._dateNaissance = isVerifDateNaissance(value) ? value : throw new ApplicationException(string.Format("La date est incorrecte, elle doit être supérieur à 01/01/1900 et inférieur de 15 ans à la date du jour"));
             }
         
         }
@@ -62,7 +62,7 @@ namespace SalarieDII
 
         private double CalculSalaireNet ()
         {
-            return _salaireBrut - ((_salaireBrut*_tauxCS)/100);
+            return this._salaireBrut - ((this._salaireBrut *_tauxCS)/100);
         }
 
         /// <summary>
@@ -99,6 +99,13 @@ namespace SalarieDII
             return taux >= _minTaux & taux <= _maxTaux;
         }
 
+        /// <summary>
+        /// Vérificatio, fed la date de naissance du salarié
+        /// il doit être supérieur à 01/01/1900
+        /// et doit être inférieur à la date du jour moins 15 ans
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public static bool isVerifDateNaissance ( DateTime date )
         {
             DateTime dateJour = DateTime.Now;
