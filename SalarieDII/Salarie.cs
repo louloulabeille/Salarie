@@ -21,30 +21,6 @@ namespace SalarieDII
         public const decimal _minTaux = 0.0m;
         public const int _anneeMin = -15;
 
-
-        /// <summary>
-        /// constructeur on passe un object dans le constructeur
-        /// on vérifie s'il est du même type
-        /// </summary>
-        /// <param name="sal">type object</param>
-        public Salarie( object sal )
-        {
-            if ( this.GetType() == sal.GetType() )
-            {
-                Salarie nouveauSal = (Salarie)sal;
-                this._matricule = nouveauSal.Matricule;
-                this._nom = nouveauSal.Nom;
-                this._prenom = nouveauSal.Prenom;
-                this._salaireBrut = nouveauSal.SalaireBrut;
-                this._tauxCS = nouveauSal.TauxCS;
-                this._dateNaissance = nouveauSal.DateNaissance;
-                _compteur++;
-            }
-            else
-            {
-                throw new Exception(string.Format("Impossible de faire une copie de l'objet passé en paramètre du constructeur."));
-            }
-        }
         /// <summary>
         /// constructeur sans rien
         /// </summary>
@@ -54,22 +30,39 @@ namespace SalarieDII
         }
 
         /// <summary>
-        /// constructeur qui initialise le nom et le prénom
+        /// constructeur qui initialise le nom ,le prénom et le matricule
         /// </summary>
         /// <param name="n">nom du salarié</param>
         /// <param name="p">prénom du salarié</param>
         /// <param name="m">matricule du salarié</param>
         public Salarie(string n, string p, string m)
+            : this()
         {
             this.Nom = n;
             this.Prenom = p;
             this.Matricule = m;
-            this.SalaireBrut = 0.0m;
-            this.TauxCS = 0.0m;
             this.DateNaissance = this.InitDateDeNaissance();
-            _compteur++;
         }
 
+        /// <summary>
+        /// constructeur on passe un object dans le constructeur
+        /// on vérifie s'il est du même type
+        /// </summary>
+        /// <param name="sal">type object</param>
+        public Salarie(Salarie sal)
+            : this(sal.Nom, sal.Prenom, sal.Matricule)
+        {
+            if (sal != null)
+            {
+                this._salaireBrut = sal.SalaireBrut;
+                this._tauxCS = sal.TauxCS;
+                this._dateNaissance = sal.DateNaissance;
+            }
+            else
+            {
+                throw new Exception(string.Format("Impossible de faire une copie de l'objet passé en paramètre du constructeur."));
+            }
+        }
         ~Salarie()
         {
             _compteur--;            
@@ -190,6 +183,98 @@ namespace SalarieDII
         private DateTime InitDateDeNaissance()
         {
             return DateTime.Now.AddYears(_anneeMin);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Salarie salarie &&
+                   _matricule == salarie._matricule &&
+                   _nom == salarie._nom &&
+                   _prenom == salarie._prenom &&
+                   _salaireBrut == salarie._salaireBrut &&
+                   _tauxCS == salarie._tauxCS &&
+                   _dateNaissance == salarie._dateNaissance;
+        }
+
+        public override int GetHashCode()
+        {
+            return this._matricule.GetHashCode()^ this._nom.GetHashCode()^ this._prenom.GetHashCode()^ this._salaireBrut.GetHashCode()
+                ^ this._tauxCS.GetHashCode()^this.SalaireNet.GetHashCode()^this.DateNaissance.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return string.Format($"Matricule {this.Matricule};Nom {this.Nom};Prenom {this.Prenom};Salaire Brute {this.SalaireBrut}" +
+                $";Salaire Net {this.SalaireNet};Taux charge sociale {this._tauxCS};Date de naissance {this.DateNaissance}");
+        }
+    }
+
+    /// <summary>
+    /// implémentation de la classe commercial
+    /// </summary>
+    public class Commercial : Salarie
+    {
+        private decimal _chiffreAffaire;
+        private decimal _commission;
+
+        public Commercial()
+            : base()
+        {
+
+        }
+
+        public Commercial(Commercial comm)
+            : base(comm)
+        {
+            this.ChiffreAffaire = comm.ChiffreAffaire;
+            this.Commission = comm.Commission;
+        }
+
+        public Commercial( Salarie sal )
+            : base(sal)
+        {
+
+        }
+        public Commercial(string nom, string prenom, string matricule)
+            : base(nom, prenom, matricule)
+        {
+
+        }
+
+        public decimal ChiffreAffaire { get => _chiffreAffaire;
+            set
+            {
+                this._chiffreAffaire = isVerifChiffreAffaire(value)?value: throw new Exception(string.Format("La saisie du chiffre d'affaire est invalide."));
+            }
+        }
+        public decimal Commission { get => _commission;
+            set 
+            {
+                this._commission = Salarie.isVerifTaux(value)? value: throw new Exception(string.Format("La saisie du taux de commission est erronée.")) ;
+            } 
+        }
+
+        public new decimal SalaireNet
+        {      // calcul du salaire Net du commercial
+            get
+            {
+                return CalculSalaireNet();
+            }
+        }
+
+        private  decimal CalculSalaireNet ()
+        {
+            return base.SalaireNet+ this._chiffreAffaire*(this._commission);
+        }
+
+        public static bool isVerifChiffreAffaire ( decimal chAff )
+        {
+            return chAff >= 0.0m;
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() + string.Format($";Salaire Net {this.SalaireNet}");
         }
     }
 }
