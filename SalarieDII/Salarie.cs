@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace SalarieDII
@@ -12,44 +13,102 @@ namespace SalarieDII
         private double _salaireBrut;
         private double _tauxCS;         // -- taux cotisation sociale
         private DateTime _dateNaissance;
+        public static int _compteur;   // compteur d'instance
 
         public const string _patternMatricule = @"^\d{2}[A-Z]{3}\d{2}$";
         public const string _patternNom = @"^[A-Za-z]{3,30}?$";
         public const double _maxTaux = 0.60;
         public const double _minTaux = 0.0;
         public const int _anneeMin = -15;
-        
+
+
+        /// <summary>
+        /// constructeur on passe un object dans le constructeur
+        /// on vérifie s'il est du même type
+        /// </summary>
+        /// <param name="sal">type object</param>
+        public Salarie( object sal )
+        {
+            if ( this.GetType() == sal.GetType() )
+            {
+                Salarie nouveauSal = (Salarie)sal;
+                this._matricule = nouveauSal.Matricule;
+                this._nom = nouveauSal.Nom;
+                this._prenom = nouveauSal.Prenom;
+                this._salaireBrut = nouveauSal.SalaireBrut;
+                this._tauxCS = nouveauSal.TauxCS;
+                this._dateNaissance = nouveauSal.DateNaissance;
+                _compteur++;
+            }
+            else
+            {
+                throw new ApplicationException(string.Format("Impossible de faire une copie de l'objet passé en paramètre du constructeur."));
+            }
+        }
+        /// <summary>
+        /// constructeur sans rien
+        /// </summary>
+        public Salarie()
+        {
+            _compteur++;
+        }
+
+        /// <summary>
+        /// constructeur qui initialise le nom et le prénom
+        /// </summary>
+        /// <param name="n">nom du salarié</param>
+        /// <param name="p">prénom du salarié</param>
+        /// <param name="m">matricule du salarié</param>
+        public Salarie(string n, string p, string m)
+        {
+            this.Nom = n;
+            this.Prenom = p;
+            this.Matricule = m;
+            this.SalaireBrut = 0.0;
+            this.TauxCS = 0.0;
+            this.DateNaissance = this.InitDateDeNaissance();
+            _compteur++;
+        }
+
+        ~Salarie()
+        {
+            _compteur--;
+            Console.WriteLine($"Nb instance dans le destructeur :{Salarie._compteur}");
+            GC.Collect();
+            System.Threading.Thread.Sleep(500); // va mettre en pause le programme de 500 milliseconde
+            
+        }
 
         public string Matricule { get => this._matricule;
             set
             {
-                this._matricule = isVerifMatricule(value) ? value : throw new ApplicationException(string.Format($"La saisie du matricule est incorect, il doit être de forme '12DFG15' et vous avez saisie '{value}'. "));
+                _matricule = isVerifMatricule(value) ? value : throw new ApplicationException(string.Format($"La saisie du matricule est incorect, il doit être de forme '12DFG15' et vous avez saisie '{value}'. "));
             }
         }
 
         public string Nom { get => this._nom;
             set
             {
-                this._nom = isVerifNomPrenom(value) ? value : throw new ApplicationException(string.Format($"La saisie du nom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
+                _nom = isVerifNomPrenom(value) ? value : throw new ApplicationException(string.Format($"La saisie du nom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
         public string Prenom { get => this._prenom;
             set
             {
-                this._prenom = isVerifNomPrenom(value) ? value : throw new ApplicationException(string.Format($"La saisie du prénom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
+                _prenom = isVerifNomPrenom(value) ? value : throw new ApplicationException(string.Format($"La saisie du prénom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
         public double SalaireBrut { get => this._salaireBrut; set => this._salaireBrut = value; }
         public double TauxCS { get => this._tauxCS;
             set
             {
-                this._tauxCS = isVerifTaux( value )? value: throw new ApplicationException(string.Format($"La saisie du taux est invalide, il doit être compris entre {_minTaux} et {_maxTaux}."));
+                _tauxCS = isVerifTaux( value )? value: throw new ApplicationException(string.Format($"La saisie du taux est invalide, il doit être compris entre {_minTaux} et {_maxTaux}."));
             }
         }
         public DateTime DateNaissance { get => this._dateNaissance;
             set
             {
-                this._dateNaissance = isVerifDateNaissance(value) ? value : throw new ApplicationException(string.Format("La date est incorrecte, elle doit être supérieur à 01/01/1900 et inférieur de 15 ans à la date du jour"));
+                _dateNaissance = isVerifDateNaissance(value) ? value : throw new ApplicationException(string.Format("La date est incorrecte, elle doit être supérieur à 01/01/1900 et inférieur de 15 ans à la date du jour"));
             }
         
         }
@@ -60,9 +119,14 @@ namespace SalarieDII
             }
         }
 
+
+        /// <summary>
+        /// Calcul du salaire net avec l'aide du salaire brute et du taux
+        /// </summary>
+        /// <returns></returns>
         private double CalculSalaireNet ()
         {
-            return this._salaireBrut - ((this._salaireBrut *_tauxCS)/100);
+            return _salaireBrut - ((_salaireBrut *(_tauxCS*100))/100);
         }
 
         /// <summary>
@@ -118,6 +182,11 @@ namespace SalarieDII
             }
             return false;
             
-        } 
+        }
+
+        private DateTime InitDateDeNaissance()
+        {
+            return DateTime.Now.AddYears(_anneeMin);
+        }
     }
 }

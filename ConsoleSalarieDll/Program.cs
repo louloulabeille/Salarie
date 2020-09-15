@@ -9,12 +9,12 @@ namespace ConsoleSalarieDll
         {
             Salarie personne = new Salarie();
             personne.Matricule = "15AMG34";
-            personne.Nom = "lo4ulou";
-            personne.Prenom = "l'abeille";
+            personne.Nom = "loulou";
+            personne.Prenom = "labeille";
             personne.SalaireBrut = 3000.00;
             personne.TauxCS = 0.45;
             personne.DateNaissance = new DateTime(1900,1,1);
-            Console.WriteLine($"Salarié : {personne.Matricule} | nom : {personne.Nom} | prénom : {personne.Prenom}");
+            Console.WriteLine($"Salarié : {personne.Matricule} | nom : {personne.Nom} | prénom : {personne.Prenom} | salaire net : {personne.SalaireNet}" );
 
         }
 
