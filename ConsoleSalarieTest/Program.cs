@@ -63,7 +63,7 @@ namespace ConsoleSalarieTest
             {
                 personne = new Salarie("loulou", "labeille", "45HGF45");
                 personne.SalaireBrut = 2500.00m;
-                personne.TauxCS = 0.2m;
+                personne.TauxCS = 0.01m;
                 personne2 = new Salarie(personne);
                 personne3 = new Salarie("coucou","houhou","81GFD12");
 
@@ -76,7 +76,9 @@ namespace ConsoleSalarieTest
             Console.WriteLine($"taux de la personne {personne.TauxCS}");
             Console.WriteLine($"date de naissance {personne.DateNaissance}");
             */
-            Console.WriteLine($"Nb instance :{Salarie.Compteur}");
+
+            /*
+            Console.WriteLine(string.Format($"Nb instance :{Salarie.Compteur}"));
             Console.ReadLine();
             personne2 = null;
             personne3 = null;
@@ -86,7 +88,35 @@ namespace ConsoleSalarieTest
             System.Threading.Thread.Sleep(500); // va mettre en pause le programme de 500 milliseconde
             Console.WriteLine($"Nb instance après le passage du garbage collector:{Salarie.Compteur}");
             Console.ReadLine();
+            */
 
+            /////// --- test de la classe Commercial qui hérite de salarie
+
+            try
+            {
+                Commercial com = new Commercial("loulou", "labeille", "45HGF45");
+                com.DateNaissance = new DateTime(1979, 4, 1);
+                com.SalaireBrut = 1500m;
+                com.TauxCS = 0.25m;
+                com.ChiffreAffaire = 250000m;
+                com.Commission = 0.01m;
+                Console.WriteLine(com.SalaireNet);
+                Console.WriteLine(com.ToString());
+
+                Salarie salCom = new Salarie("floflo", "florian", "19HGT12");
+                salCom.DateNaissance = new DateTime(1991,1,1);
+                salCom.SalaireBrut = 1600m;
+                salCom.TauxCS = 0.25m;
+                Commercial com2 = new Commercial(salCom);
+                //Commercial com3 = new Commercial(com2);
+                
+                Console.WriteLine(com2.ToString());
+                
+            } catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
         }
     }
 }
