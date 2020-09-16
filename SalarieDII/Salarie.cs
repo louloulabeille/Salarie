@@ -71,7 +71,7 @@ namespace SalarieDII
         public string Matricule { get => this._matricule;
             set
             {
-                this._matricule = isVerifMatricule(value) ? value : throw new Exception(string.Format($"La saisie du matricule est incorect, il doit être de forme '12DFG15' et vous avez saisie '{value}'. "));
+                this._matricule = IsVerifMatricule(value) ? value : throw new Exception(string.Format($"La saisie du matricule est incorect, il doit être de forme '12DFG15' et vous avez saisie '{value}'. "));
             }
         }
 
@@ -132,7 +132,7 @@ namespace SalarieDII
         /// </summary>
         /// <param name="mat">chaine de caractère a vérifié</param>
         /// <returns></returns>
-        public static bool isVerifMatricule ( string mat )
+        public static bool IsVerifMatricule ( string mat )
         {
             Regex rgx = new Regex(_patternMatricule);
             return rgx.IsMatch(mat);
