@@ -78,30 +78,30 @@ namespace SalarieDII
         public string Nom { get => this._nom;
             set
             {
-                this._nom = isVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du nom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
+                this._nom = IsVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du nom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
         public string Prenom { get => this._prenom;
             set
             {
-                this._prenom = isVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du prénom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
+                this._prenom = IsVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du prénom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
         public decimal SalaireBrut { get => this._salaireBrut; set => this._salaireBrut = value; }
         public decimal TauxCS { get => this._tauxCS;
             set
             {
-                this._tauxCS = isVerifTaux( value )? value: throw new Exception(string.Format($"La saisie du taux est invalide, il doit être compris entre {_minTaux} et {_maxTaux}."));
+                this._tauxCS = IsVerifTaux( value )? value: throw new Exception(string.Format($"La saisie du taux est invalide, il doit être compris entre {_minTaux} et {_maxTaux}."));
             }
         }
         public DateTime DateNaissance { get => this._dateNaissance;
             set
             {
-                this._dateNaissance = isVerifDateNaissance(value) ? value : throw new Exception(string.Format("La date est incorrecte, elle doit être supérieur à 01/01/1900 et inférieur de 15 ans à la date du jour"));
+                this._dateNaissance = IsVerifDateNaissance(value) ? value : throw new Exception(string.Format("La date est incorrecte, elle doit être supérieur à 01/01/1900 et inférieur de 15 ans à la date du jour"));
             }
         
         }
-        public decimal SalaireNet {      // calcul du salaire Nets
+        public virtual decimal SalaireNet {      // calcul du salaire Nets
             get
             {
                 return CalculSalaireNet();
@@ -143,7 +143,7 @@ namespace SalarieDII
         /// </summary>
         /// <param name="name">nom ou le prénom de la personne</param>
         /// <returns></returns>
-        public static bool isVerifNomPrenom ( string name )
+        public static bool IsVerifNomPrenom ( string name )
         {
             Regex rgx = new Regex(_patternNom);
             return rgx.IsMatch(name);
@@ -154,7 +154,7 @@ namespace SalarieDII
         /// </summary>
         /// <param name="taux"> taux à vérifier</param>
         /// <returns></returns>
-        public static bool isVerifTaux ( decimal taux )
+        public static bool IsVerifTaux ( decimal taux )
         {
             return taux >= _minTaux & taux <= _maxTaux;
         }
@@ -166,7 +166,7 @@ namespace SalarieDII
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        public static bool isVerifDateNaissance ( DateTime date )
+        public static bool IsVerifDateNaissance ( DateTime date )
         {
             DateTime dateJour = DateTime.Now;
             DateTime minDateNaissance = new DateTime(1900, 1, 1);
@@ -188,18 +188,12 @@ namespace SalarieDII
         public override bool Equals(object obj)
         {
             return obj is Salarie salarie &&
-                   _matricule == salarie._matricule &&
-                   _nom == salarie._nom &&
-                   _prenom == salarie._prenom &&
-                   _salaireBrut == salarie._salaireBrut &&
-                   _tauxCS == salarie._tauxCS &&
-                   _dateNaissance == salarie._dateNaissance;
+                   _matricule == salarie._matricule;
         }
 
         public override int GetHashCode()
         {
-            return this._matricule.GetHashCode()^ this._nom.GetHashCode()^ this._prenom.GetHashCode()^ this._salaireBrut.GetHashCode()
-                ^ this._tauxCS.GetHashCode()^this.SalaireNet.GetHashCode()^this.DateNaissance.GetHashCode();
+            return this._matricule.GetHashCode();
         }
 
         public override string ToString()
@@ -244,17 +238,22 @@ namespace SalarieDII
         public decimal ChiffreAffaire { get => _chiffreAffaire;
             set
             {
-                this._chiffreAffaire = isVerifChiffreAffaire(value)?value: throw new Exception(string.Format("La saisie du chiffre d'affaire est invalide."));
+                this._chiffreAffaire = IsVerifChiffreAffaire(value)?value: throw new Exception(string.Format("La saisie du chiffre d'affaire est invalide."));
             }
         }
         public decimal Commission { get => _commission;
             set 
             {
-                this._commission = Salarie.isVerifTaux(value)? value: throw new Exception(string.Format("La saisie du taux de commission est erronée.")) ;
+                this._commission = Salarie.IsVerifTaux(value)? value: throw new Exception(string.Format("La saisie du taux de commission est erronée.")) ;
             } 
         }
 
-        public new decimal SalaireNet
+        public decimal SalaireSansCommission
+        {
+            get { return base.SalaireNet; }
+        }
+
+        public override decimal SalaireNet
         {      // calcul du salaire Net du commercial
             get
             {
@@ -262,19 +261,19 @@ namespace SalarieDII
             }
         }
 
-        private  decimal CalculSalaireNet ()
+        private decimal CalculSalaireNet ()
         {
-            return base.SalaireNet+ this._chiffreAffaire*(this._commission);
+            return base.SalaireNet+ (this._chiffreAffaire - this._chiffreAffaire*(1-this._commission));
         }
 
-        public static bool isVerifChiffreAffaire ( decimal chAff )
+        public static bool IsVerifChiffreAffaire ( decimal chAff )
         {
             return chAff >= 0.0m;
         }
 
         public override string ToString()
         {
-            return base.ToString() + string.Format($";Salaire Net {this.SalaireNet}");
+            return base.ToString() + string.Format($";Chiffre d'affaire {this.ChiffreAffaire};Commission {this.Commission}");
         }
     }
 }
