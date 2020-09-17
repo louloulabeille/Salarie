@@ -21,12 +21,12 @@ namespace ConsoleCommercialTest
                 Debug.WriteLine(com.ToString());
                 Debug.WriteLine("Salaire sans commission {0}",com.SalaireSansCommission);
 
-                Salarie salCom = new Salarie("floflo", "florian", "19HGT12");
+                Salarie salCom = new Salarie("fdsf", "fdfs", "15FGH65");
                 salCom.DateNaissance = new DateTime(1991, 1, 1);
                 salCom.SalaireBrut = 1600m;
                 salCom.TauxCS = 0.25m;
                 Commercial com2 = new Commercial(salCom);
-                //Commercial com3 = new Commercial(com2);
+                Commercial com3 = new Commercial(com2);
 
                 Debug.WriteLine(salCom.ToString());
 

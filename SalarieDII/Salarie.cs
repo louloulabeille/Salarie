@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace SalarieDII
 {
+    
     public class Salarie
     {
         private string _matricule;
@@ -21,6 +22,7 @@ namespace SalarieDII
         public const decimal _minTaux = 0.0m;
         public const int _anneeMin = -15;
 
+        #region contructeur
         /// <summary>
         /// constructeur sans rien
         /// </summary>
@@ -63,6 +65,8 @@ namespace SalarieDII
                 throw new Exception(string.Format("Impossible de faire une copie de l'objet passé en paramètre du constructeur."));
             }
         }
+        #endregion
+
         ~Salarie()
         {
             _compteur--;            
@@ -212,7 +216,7 @@ namespace SalarieDII
         private decimal _commission;
 
         public Commercial()
-            : base()
+            //: base()
         {
 
         }
@@ -224,7 +228,7 @@ namespace SalarieDII
             this.Commission = comm.Commission;
         }
 
-        public Commercial( Salarie sal )
+        public Commercial(Salarie sal)
             : base(sal)
         {
 
@@ -235,17 +239,21 @@ namespace SalarieDII
 
         }
 
-        public decimal ChiffreAffaire { get => _chiffreAffaire;
+        public decimal ChiffreAffaire
+        {
+            get => _chiffreAffaire;
             set
             {
-                this._chiffreAffaire = IsVerifChiffreAffaire(value)?value: throw new Exception(string.Format("La saisie du chiffre d'affaire est invalide."));
+                this._chiffreAffaire = IsVerifChiffreAffaire(value) ? value : throw new Exception(string.Format("La saisie du chiffre d'affaire est invalide."));
             }
         }
-        public decimal Commission { get => _commission;
-            set 
+        public decimal Commission
+        {
+            get => _commission;
+            set
             {
-                this._commission = Salarie.IsVerifTaux(value)? value: throw new Exception(string.Format("La saisie du taux de commission est erronée.")) ;
-            } 
+                this._commission = Salarie.IsVerifTaux(value) ? value : throw new Exception(string.Format("La saisie du taux de commission est erronée."));
+            }
         }
 
         public decimal SalaireSansCommission
@@ -261,12 +269,12 @@ namespace SalarieDII
             }
         }
 
-        private decimal CalculSalaireNet ()
+        private decimal CalculSalaireNet()
         {
-            return base.SalaireNet+ (this._chiffreAffaire - this._chiffreAffaire*(1-this._commission));
+            return base.SalaireNet + (this._chiffreAffaire - this._chiffreAffaire * (1 - this._commission));
         }
 
-        public static bool IsVerifChiffreAffaire ( decimal chAff )
+        public static bool IsVerifChiffreAffaire(decimal chAff)
         {
             return chAff >= 0.0m;
         }
