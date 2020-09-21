@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 
 namespace SalarieDII
 {
-    
     public class Salarie
     {
         private string _matricule;
@@ -67,11 +66,14 @@ namespace SalarieDII
         }
         #endregion
 
+        #region Destructeur
         ~Salarie()
         {
-            _compteur--;            
+            _compteur--;
         }
+        #endregion
 
+        #region Set et Get
         public string Matricule { get => this._matricule;
             set
             {
@@ -95,7 +97,11 @@ namespace SalarieDII
         public decimal TauxCS { get => this._tauxCS;
             set
             {
-                this._tauxCS = IsVerifTaux( value )? value: throw new Exception(string.Format($"La saisie du taux est invalide, il doit être compris entre {_minTaux} et {_maxTaux}."));
+                // ajout d'un évènement quand modification du salaire brute pour afficher l'ancien
+                // salaire et taux d'augmentation
+
+                // enregistrement
+                this._tauxCS = IsVerifTaux(value) ? value : throw new Exception(string.Format($"La saisie du taux est invalide, il doit être compris entre {_minTaux} et {_maxTaux}."));
             }
         }
         public DateTime DateNaissance { get => this._dateNaissance;
@@ -103,7 +109,7 @@ namespace SalarieDII
             {
                 this._dateNaissance = IsVerifDateNaissance(value) ? value : throw new Exception(string.Format("La date est incorrecte, elle doit être supérieur à 01/01/1900 et inférieur de 15 ans à la date du jour"));
             }
-        
+
         }
         public virtual decimal SalaireNet {      // calcul du salaire Nets
             get
@@ -112,23 +118,17 @@ namespace SalarieDII
             }
         }
 
-        public static int Compteur { 
+        public static int Compteur {
             get
             {
                 return Salarie._compteur;
-            }    
+            }
         }
+        #endregion
 
 
-        /// <summary>
-        /// Calcul du salaire net avec l'aide du salaire brute et du taux
-        /// </summary>
-        /// <returns></returns>
-        private decimal CalculSalaireNet ()
-        {
-            return this._salaireBrut  * (1-this.TauxCS);
-        }
 
+        #region méthode de vérification de classe en static
         /// <summary>
         /// méthode static qui vérifie si le matricule
         /// a bien été saisie sous le format de décimal décimal Majuscule Majuscule Majuscule Décima décimal
@@ -136,7 +136,7 @@ namespace SalarieDII
         /// </summary>
         /// <param name="mat">chaine de caractère a vérifié</param>
         /// <returns></returns>
-        public static bool IsVerifMatricule ( string mat )
+        public static bool IsVerifMatricule(string mat)
         {
             Regex rgx = new Regex(_patternMatricule);
             return rgx.IsMatch(mat);
@@ -147,7 +147,7 @@ namespace SalarieDII
         /// </summary>
         /// <param name="name">nom ou le prénom de la personne</param>
         /// <returns></returns>
-        public static bool IsVerifNomPrenom ( string name )
+        public static bool IsVerifNomPrenom(string name)
         {
             Regex rgx = new Regex(_patternNom);
             return rgx.IsMatch(name);
@@ -158,7 +158,7 @@ namespace SalarieDII
         /// </summary>
         /// <param name="taux"> taux à vérifier</param>
         /// <returns></returns>
-        public static bool IsVerifTaux ( decimal taux )
+        public static bool IsVerifTaux(decimal taux)
         {
             return taux >= _minTaux & taux <= _maxTaux;
         }
@@ -170,7 +170,7 @@ namespace SalarieDII
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        public static bool IsVerifDateNaissance ( DateTime date )
+        public static bool IsVerifDateNaissance(DateTime date)
         {
             DateTime dateJour = DateTime.Now;
             DateTime minDateNaissance = new DateTime(1900, 1, 1);
@@ -181,107 +181,69 @@ namespace SalarieDII
                 return true;
             }
             return false;
-            
+
+        }
+        #endregion
+
+        #region méthode de la classe
+        /// <summary>
+        /// Calcul du salaire net avec l'aide du salaire brute et du taux
+        /// </summary>
+        /// <returns></returns>
+        private decimal CalculSalaireNet()
+        {
+            return this._salaireBrut * (1 - this.TauxCS);
         }
 
+        /// <summary>
+        /// méthode d'intitialisation  de la date de Naissance
+        /// qui prend la date du jour moins -15 ans
+        /// </summary>
+        /// <returns></returns>
         private DateTime InitDateDeNaissance()
         {
             return DateTime.Now.AddYears(_anneeMin);
         }
+        #endregion
 
+        #region Surcharge des méthode Object
+        /// <summary>
+        /// surcharge de méthode equals
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             return obj is Salarie salarie &&
                    _matricule == salarie._matricule;
         }
 
+        /// <summary>
+        /// surcharge de la méthode getHascode
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return this._matricule.GetHashCode();
         }
 
+
+        /// <summary>
+        /// surcharge de la méthode ToString
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Format($"Matricule {this.Matricule};Nom {this.Nom};Prenom {this.Prenom};Salaire Brute {this.SalaireBrut}" +
                 $";Salaire Net {this.SalaireNet};Taux charge sociale {this._tauxCS};Date de naissance {this.DateNaissance}");
         }
-    }
+        #endregion
 
-    /// <summary>
-    /// implémentation de la classe commercial
-    /// </summary>
-    public class Commercial : Salarie
-    {
-        private decimal _chiffreAffaire;
-        private decimal _commission;
+        #region Gestion du délégué et des évènement dans la classe Salarie
 
-        public Commercial()
-            //: base()
-        {
+        public delegate void EventSalaryChangeHandler(object sender, EventSalaryEventArgs e);
 
+        public event EventSalaryChangeHandler EventSalary;
+        #endregion
         }
-
-        public Commercial(Commercial comm)
-            : base(comm)
-        {
-            this.ChiffreAffaire = comm.ChiffreAffaire;
-            this.Commission = comm.Commission;
-        }
-
-        public Commercial(Salarie sal)
-            : base(sal)
-        {
-
-        }
-        public Commercial(string nom, string prenom, string matricule)
-            : base(nom, prenom, matricule)
-        {
-
-        }
-
-        public decimal ChiffreAffaire
-        {
-            get => _chiffreAffaire;
-            set
-            {
-                this._chiffreAffaire = IsVerifChiffreAffaire(value) ? value : throw new Exception(string.Format("La saisie du chiffre d'affaire est invalide."));
-            }
-        }
-        public decimal Commission
-        {
-            get => _commission;
-            set
-            {
-                this._commission = Salarie.IsVerifTaux(value) ? value : throw new Exception(string.Format("La saisie du taux de commission est erronée."));
-            }
-        }
-
-        public decimal SalaireSansCommission
-        {
-            get { return base.SalaireNet; }
-        }
-
-        public override decimal SalaireNet
-        {      // calcul du salaire Net du commercial
-            get
-            {
-                return CalculSalaireNet();
-            }
-        }
-
-        private decimal CalculSalaireNet()
-        {
-            return base.SalaireNet + (this._chiffreAffaire - this._chiffreAffaire * (1 - this._commission));
-        }
-
-        public static bool IsVerifChiffreAffaire(decimal chAff)
-        {
-            return chAff >= 0.0m;
-        }
-
-        public override string ToString()
-        {
-            return base.ToString() + string.Format($";Chiffre d'affaire {this.ChiffreAffaire};Commission {this.Commission}");
-        }
-    }
 }

@@ -12,7 +12,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleSalarieTest", "Conso
 		{C3D3196E-3ABE-43D1-A894-0B3E411BE5D3} = {C3D3196E-3ABE-43D1-A894-0B3E411BE5D3}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleCommercialTest", "ConsoleCommercialTest\ConsoleCommercialTest.csproj", "{5BA30CA8-32FA-4E8D-90F9-D8D9311A2866}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleCommercialTest", "ConsoleCommercialTest\ConsoleCommercialTest.csproj", "{5BA30CA8-32FA-4E8D-90F9-D8D9311A2866}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsSalarie", "WindowsFormsSalarie\WindowsFormsSalarie.csproj", "{628FFE36-9583-4A3B-85EE-6C14CF4EFD3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{5BA30CA8-32FA-4E8D-90F9-D8D9311A2866}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BA30CA8-32FA-4E8D-90F9-D8D9311A2866}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BA30CA8-32FA-4E8D-90F9-D8D9311A2866}.Release|Any CPU.Build.0 = Release|Any CPU
+		{628FFE36-9583-4A3B-85EE-6C14CF4EFD3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{628FFE36-9583-4A3B-85EE-6C14CF4EFD3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{628FFE36-9583-4A3B-85EE-6C14CF4EFD3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{628FFE36-9583-4A3B-85EE-6C14CF4EFD3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
