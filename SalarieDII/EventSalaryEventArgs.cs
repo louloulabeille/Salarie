@@ -8,6 +8,7 @@ namespace SalarieDII
     public class EventSalaryEventArgs : EventArgs
     {
         private decimal _ancienSalaire;
+        private decimal _nouveauSalaire;
         private decimal _tauxChangement;
 
         #region constructeur
@@ -16,9 +17,10 @@ namespace SalarieDII
         /// </summary>
         /// <param name="salaire">montant de l'ancien salaire en décimal</param>
         /// <param name="taux">taux d'augementation en décimal</param>
-        public EventSalaryEventArgs( decimal salaire, decimal taux )
+        public EventSalaryEventArgs( decimal oldSalary, decimal newSalary,decimal taux )
         {
-            this.AncienSalaire = salaire;
+            this.AncienSalaire = oldSalary;
+            this.NouveauSalaire = newSalary;
             this.TauxChangement = taux;
         }
         #endregion
@@ -26,6 +28,7 @@ namespace SalarieDII
         #region encapsulation Get et Set
         public decimal AncienSalaire { get => _ancienSalaire; set => _ancienSalaire = value; }
         public decimal TauxChangement { get => _tauxChangement; set => _tauxChangement = value; }
+        public decimal NouveauSalaire { get => _nouveauSalaire; set => _nouveauSalaire = value; }
         #endregion
 
     }

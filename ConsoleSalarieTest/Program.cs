@@ -84,12 +84,21 @@ namespace ConsoleSalarieTest
             //System.Threading.Thread.Sleep(1000); // va mettre en pause le programme de 500 milliseconde
             //Console.WriteLine($"Nb instance après le passage du garbage collector:{Salarie.Compteur}");
             //Console.ReadLine();
-            TestIoFichier();
+
+            // méthode de test des méthodes io de la classe Salaries (classe de typage List<Salarie>)
+            //TestIoFichier();
 
 
-
+            TestEvenementDelague();
         }
 
+        /// <summary>
+        /// méthode de test pour tester les méthodes de Salaries
+        /// entré/sortie
+        /// pour fichier texte
+        /// pour ficher binaire
+        /// pour fichier en xml
+        /// </summary>
         static void TestIoFichier ()
         {
             /****************************/
@@ -133,6 +142,37 @@ namespace ConsoleSalarieTest
             {
                 Debug.WriteLine(item.ToString());
             }
+        }
+
+
+        /// <summary>
+        /// méthode de teste des évènement et délégué
+        /// </summary>
+        static void TestEvenementDelague ()
+        {
+            Salarie s1 = new Salarie("Solange", "Juju", "45GFK52")
+            {
+                DateNaissance = new DateTime(1986, 8, 5),
+                SalaireBrut = 3000m,
+                TauxCS = 0.28m
+            };
+
+            s1.EventSalary += Salarie_EventSalary;
+            s1.SalaireBrut = 3300m;
+        }
+
+
+        /// <summary>
+        /// méthode de évènement EventSalary de type délégué EventHandler<T>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        static void Salarie_EventSalary(object sender, EventSalaryEventArgs e)
+        {
+            decimal différence = ((e.NouveauSalaire - e.AncienSalaire) / e.AncienSalaire) * 100;
+
+            Debug.WriteLine(string.Format($"Changement de salaire augmentation de {Math.Round(différence,2)}%"));
+            Debug.WriteLine($"ancien salaire {e.AncienSalaire}€ / nouveau salaire {e.NouveauSalaire}€");
         }
     }
 }

@@ -94,7 +94,20 @@ namespace SalarieDII
                 this._prenom = IsVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du prénom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
-        public decimal SalaireBrut { get => this._salaireBrut; set => this._salaireBrut = value; }
+        public decimal SalaireBrut
+        {
+            get => this._salaireBrut;
+            set
+            {
+                // appel de event si les conditions sont bonne sinon rien
+
+                if ( this._salaireBrut != 0 && this._salaireBrut != value )
+                {
+                    OnEventSalary(this,new EventSalaryEventArgs(this.SalaireBrut,value,this.TauxCS));
+                }
+                this._salaireBrut = value;
+            }
+        }
         public decimal TauxCS { get => this._tauxCS;
             set
             {
@@ -241,9 +254,21 @@ namespace SalarieDII
 
         #region Gestion du délégué et des évènement dans la classe Salarie
 
-        public delegate void EventSalaryChangeHandler(object sender, EventSalaryEventArgs e);
+        //public delegate void EventSalaryChangeHandler(object sender, EventSalaryEventArgs e);
+        //public event EventSalaryChangeHandler EventSalary;
 
-        public event EventSalaryChangeHandler EventSalary;
-        #endregion
+        /// <summary>
+        /// declaration de event de type de classe EventHandler<T>
+        /// type délégué généritque
+        /// </summary>
+        public event EventHandler<EventSalaryEventArgs> EventSalary;
+
+        protected virtual void OnEventSalary(object sender, EventSalaryEventArgs e)
+        {
+            EventHandler<EventSalaryEventArgs> handler = EventSalary;
+            if (handler != null) handler(sender,e);
         }
+
+        #endregion
+    }
 }
