@@ -19,7 +19,7 @@ namespace WindowsFormsSalarie
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new FormPremier());
             //Application.Run(new FormCalculatrice());
-            Application.Run(new FormBoutonRadio());
+            Application.Run(new FormCaseGroupButton());
         }
     }
 }

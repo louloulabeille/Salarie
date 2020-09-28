@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace SalarieDII
 {
     /// <summary>
     /// implémentation de la classe commercial
     /// </summary>
+    [Serializable()]
     public class Commercial : Salarie
     {
         private decimal _chiffreAffaire;

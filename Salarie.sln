@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleSalarieTest", "Conso
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleCommercialTest", "ConsoleCommercialTest\ConsoleCommercialTest.csproj", "{5BA30CA8-32FA-4E8D-90F9-D8D9311A2866}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsSalarie", "WindowsFormsSalarie\WindowsFormsSalarie.csproj", "{628FFE36-9583-4A3B-85EE-6C14CF4EFD3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsFormsSalarie", "WindowsFormsSalarie\WindowsFormsSalarie.csproj", "{628FFE36-9583-4A3B-85EE-6C14CF4EFD3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

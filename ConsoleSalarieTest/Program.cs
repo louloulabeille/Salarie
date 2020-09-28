@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using SalarieDII;
+using SalarieList;
 
 namespace ConsoleSalarieTest
 {
@@ -57,37 +59,80 @@ namespace ConsoleSalarieTest
             */
 
             //
-            Salarie personne, personne2,personne3 = null;
+            //Salarie personne, personne2,personne3 = null;
 
-            try
-            {
-                personne = new Salarie("loulou", "labeille", "45HGF45");
-                personne.SalaireBrut = 2500.00m;
-                personne.TauxCS = 0.01m;
-                personne2 = new Salarie(personne);
-                personne3 = new Salarie("coucou","houhou","81GFD12");
+            //try
+            //{
+            //    personne = new Salarie("loulou", "labeille", "45HGF45");
+            //    personne.SalaireBrut = 2500.00m;
+            //    personne.TauxCS = 0.01m;
+            //    personne2 = new Salarie(personne);
+            //    personne3 = new Salarie("coucou","houhou","81GFD12");
 
-            } catch ( Exception e)
+            //} catch ( Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //}
+
+            //Console.WriteLine(string.Format($"Nb instance :{Salarie.Compteur}"));
+            //Console.ReadLine();
+            //personne2 = null;
+            //personne3 = null;
+            //Console.WriteLine($"Nb instance avant le passage du garbage collector :{Salarie.Compteur}");
+            //Console.ReadLine();
+            //GC.Collect();
+            //System.Threading.Thread.Sleep(1000); // va mettre en pause le programme de 500 milliseconde
+            //Console.WriteLine($"Nb instance après le passage du garbage collector:{Salarie.Compteur}");
+            //Console.ReadLine();
+            TestIoFichier();
+
+
+
+        }
+
+        static void TestIoFichier ()
+        {
+            /****************************/
+            // test de la classe Salaries (list de salarié)
+
+            Salarie s1 = new Salarie("Cousin", "Cedric", "12LFG85");
+            s1.DateNaissance = new DateTime(1980, 02, 01);
+            s1.SalaireBrut = 2500m;
+            s1.TauxCS = 0.27m;
+
+            Salarie s2 = new Salarie("Cousine", "Mylene", "22LFG75")
+            { DateNaissance = new DateTime(1975, 05, 22), SalaireBrut = 2200m, TauxCS = 0.25m };
+
+            Salarie s3 = new Salarie("Tonton", "Jojo", "89DFG72")
+            { DateNaissance = new DateTime(1999, 04, 26), SalaireBrut = 1800m, TauxCS = 0.22m };
+
+            Salarie s4 = new Salarie("Tante", "Jeanine", "72DTH45")
+            { DateNaissance = new DateTime(1994, 12, 25), SalaireBrut = 3800m, TauxCS = 0.32m };
+
+
+            //Salaries listSalarie = new Salaries() {};
+            Salaries listSalarie = new Salaries() { s1, s2, s3, s4 };
+            Salaries listSalaries = new Salaries();
+
+            /***Gestion en csv*****/
+            //listSalarie.SaveText("salaries.csv");
+            //listSalaries.LoadText("salaries.csv",1);
+
+            //listSalarie.SaveBinary("salaries.dat");
+            //listSalaries.LoadBinary("salaries.dat");
+
+            listSalarie.SaveXml("salaries.xml");
+            listSalaries.LoadXml("salaries.xml");
+
+            foreach (Salarie item in listSalaries)
             {
-                Console.WriteLine(e.Message);
+                Debug.WriteLine(item.ToString());
             }
-            
 
-            
-            Console.WriteLine(string.Format($"Nb instance :{Salarie.Compteur}"));
-            Console.ReadLine();
-            personne2 = null;
-            personne3 = null;
-            Console.WriteLine($"Nb instance avant le passage du garbage collector :{Salarie.Compteur}");
-            Console.ReadLine();
-            GC.Collect();
-            System.Threading.Thread.Sleep(1000); // va mettre en pause le programme de 500 milliseconde
-            Console.WriteLine($"Nb instance après le passage du garbage collector:{Salarie.Compteur}");
-            Console.ReadLine();
-            
-
-            
-            
+            foreach (Salarie item in listSalarie)
+            {
+                Debug.WriteLine(item.ToString());
+            }
         }
     }
 }

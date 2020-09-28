@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace SalarieDII
 {
+    [Serializable()]
     public class Salarie
     {
         private string _matricule;
@@ -125,7 +126,6 @@ namespace SalarieDII
             }
         }
         #endregion
-
 
 
         #region méthode de vérification de classe en static
