@@ -93,6 +93,7 @@ namespace ConsoleSalarieTest
             TestEvenementDelague();
         }
 
+        #region méthode de test des entré sortie
         /// <summary>
         /// méthode de test pour tester les méthodes de Salaries
         /// entré/sortie
@@ -144,12 +145,13 @@ namespace ConsoleSalarieTest
                 Debug.WriteLine(item.ToString());
             }
         }
+        #endregion
 
-
+        #region méthode de test Event Static test
         /// <summary>
         /// méthode de teste des évènement et délégué
         /// </summary>
-        static void TestEvenementDelague ()
+        static void TestEvenementDelague()
         {
             try
             {
@@ -180,7 +182,7 @@ namespace ConsoleSalarieTest
                 s2.EventNameNickName += Salarie_EventNameNickName;
                 s2.Prenom = "César";
 
-                Salarie s3 = new Salarie("Trump","Donald","85MPD56");
+                Salarie s3 = new Salarie("Trump", "Donald", "85MPD56");
 
                 if (true)
                 {
@@ -188,26 +190,26 @@ namespace ConsoleSalarieTest
                 }
 
                 Salarie s5 = new Salarie();
-                
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
             }
-            
-    }
+        }
+        #endregion
 
-
-    /// <summary>
-    /// méthode de évènement EventSalary de type délégué EventHandler<T>
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    static void Salarie_EventSalary(object sender, EventSalaryEventArgs e)
+        #region methode des event
+        /// <summary>
+        /// méthode de évènement EventSalary de type délégué EventHandler<T>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        static void Salarie_EventSalary(object sender, EventSalaryEventArgs e)
         {
             decimal différence = ((e.NouveauSalaire - e.AncienSalaire) / e.AncienSalaire) * 100;
             Debug.WriteLine($"Changement de salaire pour {e.NomPrenom}");
-            Debug.WriteLine(string.Format($"Il y a une augmentation de {Math.Round(différence,2)}%"));
+            Debug.WriteLine(string.Format($"Il y a une augmentation de {Math.Round(différence, 2)}%"));
             Debug.WriteLine($"ancien salaire {e.AncienSalaire}€ / nouveau salaire {e.NouveauSalaire}€");
         }
 
@@ -229,10 +231,10 @@ namespace ConsoleSalarieTest
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        static void Salarie_EventCompteur(object sender,EventArgs e)
+        static void Salarie_EventCompteur(object sender, EventArgs e)
         {
             Debug.WriteLine($"Voici le nombre de salarie ouvert {Salarie.Compteur}");
         }
+        #endregion
     }
-
 }
