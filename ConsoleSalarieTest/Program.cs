@@ -87,10 +87,11 @@ namespace ConsoleSalarieTest
             //Console.ReadLine();
 
             // méthode de test des méthodes io de la classe Salaries (classe de typage List<Salarie>)
-            //TestIoFichier();
+            TestIoFichier();
 
 
-            TestEvenementDelague();
+            // méthode de test pour la gestion des délégué
+            //TestEvenement();
         }
 
         #region méthode de test des entré sortie
@@ -118,22 +119,35 @@ namespace ConsoleSalarieTest
             { DateNaissance = new DateTime(1999, 04, 26), SalaireBrut = 1800m, TauxCS = 0.22m };
 
             Salarie s4 = new Salarie("Tante", "Jeanine", "72DTH45")
-            { DateNaissance = new DateTime(1994, 12, 25), SalaireBrut = 3800m, TauxCS = 0.32m };
+            { DateNaissance = new DateTime(1994, 12, 25),  TauxCS = 0.32m };
+
+            Salarie s5 = new Salarie("Voisin","Florian","45FGL25")
+            { DateNaissance = new DateTime(1989, 5, 21), SalaireBrut = 1800m, TauxCS = 0.30m };
+
+            Commercial c1 = new Commercial(s5)
+            { ChiffreAffaire =150000m, Commission = 0.01m };
+            
 
 
             //Salaries listSalarie = new Salaries() {};
-            Salaries listSalarie = new Salaries() { s1, s2, s3, s4 };
+            Salaries listSalarie = new Salaries() { s1, s2, s3, c1, s4 };
             Salaries listSalaries = new Salaries();
 
             /***Gestion en csv*****/
             //listSalarie.SaveText("salaries.csv");
             //listSalaries.LoadText("salaries.csv",1);
 
+            /*****gestion en binaire ****/
             //listSalarie.SaveBinary("salaries.dat");
             //listSalaries.LoadBinary("salaries.dat");
 
-            listSalarie.SaveXml("salaries.xml");
-            listSalaries.LoadXml("salaries.xml");
+            /*****gestion en xml ****/
+            //listSalarie.SaveXml("salaries.xml");
+            //listSalaries.LoadXml("salaries.xml");
+
+            /**** gestion en json avec Newtonsolft ****/
+            listSalarie.SaveJson("salaries.txt");
+            listSalaries.LoadJson("salaries.txt");
 
             foreach (Salarie item in listSalaries)
             {
@@ -151,7 +165,7 @@ namespace ConsoleSalarieTest
         /// <summary>
         /// méthode de teste des évènement et délégué
         /// </summary>
-        static void TestEvenementDelague()
+        static void TestEvenement()
         {
             try
             {

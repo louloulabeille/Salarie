@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Converters;
+using System;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
@@ -302,5 +303,13 @@ namespace SalarieDII
         }
 
         #endregion
+    }
+    public class SalarieConvert : CustomCreationConverter<Salarie>
+    {
+        public override Salarie Create(Type objectType)
+        {
+            return new Commercial();
+            //throw new NotImplementedException();
+        }
     }
 }

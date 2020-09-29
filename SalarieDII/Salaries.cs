@@ -4,12 +4,15 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using SalarieDII;
-
+using Newtonsoft.Json;
+using System.Diagnostics;
+using Newtonsoft.Json.Converters;
 
 namespace SalarieList
 {
     [Serializable()]
     [XmlInclude(typeof(Commercial))]
+
     public class Salaries : List<Salarie>
     {
         #region méthode de gestion de salarie
@@ -149,11 +152,7 @@ namespace SalarieList
             using (FileStream fS = File.Exists(@path) ? File.Open(@path, FileMode.Open) : File.Open(@path, FileMode.Create))
             {
                 BinaryFormatter format = new BinaryFormatter();
-                Salaries sal = new Salaries();
-
-                sal = (Salaries)format.Deserialize(fS);
-                this.AddRange (sal);
-                //this. = sal;
+                this.AddRange (format.Deserialize(fS) as Salaries);
                 fS.Dispose();
                 fS.Close();
             }
@@ -183,14 +182,66 @@ namespace SalarieList
             using (TextReader tR = File.OpenText(@path))
             {
                 XmlSerializer ser = new XmlSerializer(typeof(Salaries));
-                this.AddRange((Salaries)ser.Deserialize(tR));
+                this.AddRange(ser.Deserialize(tR) as Salaries);
                 tR.Close();
             }
         }
 
+        /// <summary>
+        /// méthode d'écriture dans un fichier json
+        /// </summary>
+        /// <param name="path"></param>
+        public void SaveJson ( string path )
+        {
+            JsonSerializer output = new JsonSerializer();
+            using StreamWriter sW = new StreamWriter(@path);
+            using JsonWriter jW = new JsonTextWriter(sW);
+
+            //output.Serialize(jW, this, typeof(Salaries));
+            
+            string preserveReferenacesAll = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
+            {
+                //PreserveReferencesHandling = PreserveReferencesHandling.All,
+                TypeNameHandling = TypeNameHandling.All,
+                //TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full
+            });
+            output.Serialize(jW, preserveReferenacesAll);
+            jW.Close();
+            sW.Close();
+        }
+
+        /// <summary>
+        /// méthode de lecture de la sérialization en jSon
+        /// </summary>
+        /// <param name="path"></param>
+        public void LoadJson ( string path )
+        {
+            JsonSerializer input = new JsonSerializer();
+            using StreamReader sR = new StreamReader(@path);
+            using JsonReader jR = new JsonTextReader(sR);
+
+            //this.AddRange(input.Deserialize<Salaries>(jR));
+            //this.AddRange(input.Deserialize(jR,typeof(Salaries)) as Salaries);
+            
+            this.AddRange(JsonConvert.DeserializeObject<Salaries>
+                (input.Deserialize(jR).ToString(),
+                new JsonSerializerSettings()
+                {
+                    //PreserveReferencesHandling = PreserveReferencesHandling.All,
+                    TypeNameHandling = TypeNameHandling.All,
+                    //TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full
+                }));
+            //Salarie sal = li.Extract("45FGL25");
+            //Commercial com = (Commercial)sal;
+            //Debug.WriteLine(com.ToString());
+            jR.Close();
+            sR.Close();
+        }
+
         #endregion
     }
-
+    
+   
     /// <summary>
     /// classe de gestion de salarie 
     /// avec Hashset
