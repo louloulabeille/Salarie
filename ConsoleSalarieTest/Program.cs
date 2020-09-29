@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using SalarieDII;
 using SalarieList;
 
@@ -150,29 +151,88 @@ namespace ConsoleSalarieTest
         /// </summary>
         static void TestEvenementDelague ()
         {
-            Salarie s1 = new Salarie("Solange", "Juju", "45GFK52")
+            try
             {
-                DateNaissance = new DateTime(1986, 8, 5),
-                SalaireBrut = 3000m,
-                TauxCS = 0.28m
-            };
+                Salarie.EventCompteur += Salarie_EventCompteur;
 
-            s1.EventSalary += Salarie_EventSalary;
-            s1.SalaireBrut = 3300m;
+                Salarie s1 = new Salarie("Solange", "Juju", "45GFK52")
+                {
+                    DateNaissance = new DateTime(1986, 8, 5),
+                    SalaireBrut = 3000m,
+                    TauxCS = 0.28m
+                };
+
+                s1.EventSalary += Salarie_EventSalary;
+                s1.SalaireBrut = 3300m;
+
+                Salarie s2 = new Commercial("Brive", "Sylvain", "15LFK45")
+                {
+                    DateNaissance = new DateTime(1985, 12, 1),
+                    SalaireBrut = 1500m,
+                    TauxCS = 0.22m,
+                    ChiffreAffaire = 145000m,
+                    Commission = 0.01m
+                };
+
+                s2.EventSalary += Salarie_EventSalary;
+                s2.SalaireBrut = 1800.0m;
+
+                s2.EventNameNickName += Salarie_EventNameNickName;
+                s2.Prenom = "César";
+
+                Salarie s3 = new Salarie("Trump","Donald","85MPD56");
+
+                if (true)
+                {
+                    Salarie s4 = new Salarie();
+                }
+
+                Salarie s5 = new Salarie();
+                
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+            
+    }
+
+
+    /// <summary>
+    /// méthode de évènement EventSalary de type délégué EventHandler<T>
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    static void Salarie_EventSalary(object sender, EventSalaryEventArgs e)
+        {
+            decimal différence = ((e.NouveauSalaire - e.AncienSalaire) / e.AncienSalaire) * 100;
+            Debug.WriteLine($"Changement de salaire pour {e.NomPrenom}");
+            Debug.WriteLine(string.Format($"Il y a une augmentation de {Math.Round(différence,2)}%"));
+            Debug.WriteLine($"ancien salaire {e.AncienSalaire}€ / nouveau salaire {e.NouveauSalaire}€");
         }
 
-
         /// <summary>
-        /// méthode de évènement EventSalary de type délégué EventHandler<T>
+        /// méthode de évenement static EventNameNickName de la classe Salarie
+        /// elle est utilisée lors du changement du nom ou prénom
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        static void Salarie_EventSalary(object sender, EventSalaryEventArgs e)
+        static void Salarie_EventNameNickName(object sender, EventNameNickNameEventArgs e)
         {
-            decimal différence = ((e.NouveauSalaire - e.AncienSalaire) / e.AncienSalaire) * 100;
+            Debug.WriteLine($"Changement au niveau du nom ou du prénom");
+            Debug.WriteLine($"ancien :{e.OldName} {e.OldNickName} et voici les nouveaux {e.NewName} {e.NewNickName}");
+        }
 
-            Debug.WriteLine(string.Format($"Changement de salaire augmentation de {Math.Round(différence,2)}%"));
-            Debug.WriteLine($"ancien salaire {e.AncienSalaire}€ / nouveau salaire {e.NouveauSalaire}€");
+        /// <summary>
+        /// méthode de event changement du compteur de la classe Salarie
+        /// static _compteur
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        static void Salarie_EventCompteur(object sender,EventArgs e)
+        {
+            Debug.WriteLine($"Voici le nombre de salarie ouvert {Salarie.Compteur}");
         }
     }
+
 }

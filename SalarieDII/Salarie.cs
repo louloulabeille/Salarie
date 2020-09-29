@@ -17,7 +17,7 @@ namespace SalarieDII
         private static int _compteur;   // compteur d'instance
 
         public const string _patternMatricule = @"^\d{2}[A-Z]{3}\d{2}$";
-        public const string _patternNom = @"^[A-Za-z]{3,30}?$";
+        public const string _patternNom = @"^\w[^0-9]{3,30}?$";
         public const decimal _maxTaux = 0.60m;
         public const decimal _minTaux = 0.0m;
         public const int _anneeMin = -15;
@@ -28,6 +28,7 @@ namespace SalarieDII
         /// </summary>
         public Salarie()
         {
+            Salarie.OnEventCompteur(this, new EventArgs());
             _compteur++;
         }
 
@@ -71,6 +72,7 @@ namespace SalarieDII
         ~Salarie()
         {
             _compteur--;
+            Salarie.EventCompteur(this, new EventArgs());
         }
         #endregion
 
@@ -85,12 +87,20 @@ namespace SalarieDII
         public string Nom { get => this._nom;
             set
             {
+                if ( !string.IsNullOrEmpty(this._nom) && !string.Equals(this._nom,value) )
+                {
+                    OnEventNameNickName(this, new EventNameNickNameEventArgs(this.Nom, this.Prenom, value, this.Prenom));
+                }
                 this._nom = IsVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du nom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
         public string Prenom { get => this._prenom;
             set
             {
+                if( !string.IsNullOrEmpty(this.Prenom) && !string.Equals(this._prenom,value) )
+                {
+                    OnEventNameNickName(this, new EventNameNickNameEventArgs(this.Nom, this.Prenom, this.Nom, value));
+                }
                 this._prenom = IsVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du prénom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
@@ -101,9 +111,9 @@ namespace SalarieDII
             {
                 // appel de event si les conditions sont bonne sinon rien
 
-                if ( this._salaireBrut != 0 && this._salaireBrut != value )
+                if ( value != 0 && this._salaireBrut != value )
                 {
-                    OnEventSalary(this,new EventSalaryEventArgs(this.SalaireBrut,value,this.TauxCS));
+                    OnEventSalary(this,new EventSalaryEventArgs(string.Format($"{ this.Nom } {this.Prenom}"),this.SalaireBrut,value,this.TauxCS));
                 }
                 this._salaireBrut = value;
             }
@@ -266,6 +276,28 @@ namespace SalarieDII
         protected virtual void OnEventSalary(object sender, EventSalaryEventArgs e)
         {
             EventHandler<EventSalaryEventArgs> handler = EventSalary;
+            if (handler != null) handler(sender,e);
+        }
+
+
+        /// <summary>
+        /// Event de type static cela ne change pas grand chose
+        /// mais c'est possible de le faire
+        /// </summary>
+        public event EventHandler<EventNameNickNameEventArgs> EventNameNickName;
+
+        protected virtual void OnEventNameNickName(object sender, EventNameNickNameEventArgs e)
+        {
+            EventHandler<EventNameNickNameEventArgs> handler = EventNameNickName;
+            if (handler != null) handler(sender, e);
+        }
+
+
+        public static event EventHandler EventCompteur;
+
+        protected static void OnEventCompteur(object sender,EventArgs e)
+        {
+            EventHandler handler = EventCompteur;
             if (handler != null) handler(sender,e);
         }
 
