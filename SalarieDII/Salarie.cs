@@ -17,11 +17,11 @@ namespace SalarieDII
         private DateTime _dateNaissance;
         private static int _compteur;   // compteur d'instance
 
-        public const string _patternMatricule = @"^\d{2}[A-Z]{3}\d{2}$";
-        public const string _patternNom = @"^\w[^0-9]{3,30}?$";
-        public const decimal _maxTaux = 0.60m;
-        public const decimal _minTaux = 0.0m;
-        public const int _anneeMin = -15;
+        private const string _patternMatricule = @"^\d{2}[A-Z]{3}\d{2}$";
+        private const string _patternNom = @"^\w[^0-9]{3,30}?$";
+        private const decimal _maxTaux = 0.60m;
+        private const decimal _minTaux = 0.0m;
+        private const int _anneeMin = -15;
 
         #region contructeur
         /// <summary>
@@ -88,7 +88,7 @@ namespace SalarieDII
         public string Nom { get => this._nom;
             set
             {
-                if ( !string.IsNullOrEmpty(this._nom) && !string.Equals(this._nom,value) )
+                if (!string.IsNullOrEmpty(this._nom) && !string.Equals(this._nom, value))
                 {
                     OnEventNameNickName(this, new EventNameNickNameEventArgs(this.Nom, this.Prenom, value, this.Prenom));
                 }
@@ -98,7 +98,7 @@ namespace SalarieDII
         public string Prenom { get => this._prenom;
             set
             {
-                if( !string.IsNullOrEmpty(this.Prenom) && !string.Equals(this._prenom,value) )
+                if (!string.IsNullOrEmpty(this.Prenom) && !string.Equals(this._prenom, value))
                 {
                     OnEventNameNickName(this, new EventNameNickNameEventArgs(this.Nom, this.Prenom, this.Nom, value));
                 }
@@ -112,9 +112,9 @@ namespace SalarieDII
             {
                 // appel de event si les conditions sont bonne sinon rien
 
-                if ( value != 0 && this._salaireBrut != value )
+                if (value != 0 && this._salaireBrut != value)
                 {
-                    OnEventSalary(this,new EventSalaryEventArgs(string.Format($"{ this.Nom } {this.Prenom}"),this.SalaireBrut,value,this.TauxCS));
+                    OnEventSalary(this, new EventSalaryEventArgs(string.Format($"{ this.Nom } {this.Prenom}"), this.SalaireBrut, value, this.TauxCS));
                 }
                 this._salaireBrut = value;
             }
@@ -143,6 +143,21 @@ namespace SalarieDII
             }
         }
 
+        public string PatternMatricule {
+            get
+            {
+                return _patternMatricule;
+            }
+        }
+
+        public string patternNom
+        {
+            get
+            {
+                return _patternNom;
+            }
+        }
+
         public static int Compteur {
             get
             {
@@ -165,6 +180,7 @@ namespace SalarieDII
             Regex rgx = new Regex(_patternMatricule);
             return rgx.IsMatch(mat);
         }
+
         /// <summary>
         /// verifie si le nom a entre 3 et 30 caractères
         /// et non numérique. Voir la constante _patternNom
@@ -176,6 +192,7 @@ namespace SalarieDII
             Regex rgx = new Regex(_patternNom);
             return rgx.IsMatch(name);
         }
+
         /// <summary>
         /// Verifis le taux s'il est compris entre 0 et 0.6
         /// c'est a dire entre le nimTaux et maxTaux
@@ -205,7 +222,6 @@ namespace SalarieDII
                 return true;
             }
             return false;
-
         }
         #endregion
 
@@ -303,13 +319,5 @@ namespace SalarieDII
         }
 
         #endregion
-    }
-    public class SalarieConvert : CustomCreationConverter<Salarie>
-    {
-        public override Salarie Create(Type objectType)
-        {
-            return new Commercial();
-            //throw new NotImplementedException();
-        }
     }
 }

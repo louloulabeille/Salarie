@@ -91,7 +91,7 @@ namespace ConsoleSalarieTest
 
 
             // méthode de test pour la gestion des délégué
-            //TestEvenement();
+            TestEvenement();
         }
 
         #region méthode de test des entré sortie
@@ -104,60 +104,70 @@ namespace ConsoleSalarieTest
         /// </summary>
         static void TestIoFichier ()
         {
-            /****************************/
-            // test de la classe Salaries (list de salarié)
+            try
+            {
+                /****************************/
+                // test de la classe Salaries (list de salarié)
 
-            Salarie s1 = new Salarie("Cousin", "Cedric", "12LFG85");
-            s1.DateNaissance = new DateTime(1980, 02, 01);
-            s1.SalaireBrut = 2500m;
-            s1.TauxCS = 0.27m;
+                Salarie s1 = new Salarie("Cousin", "Cedric", "12LFG85");
+                s1.DateNaissance = new DateTime(1980, 02, 01);
+                s1.SalaireBrut = 2500m;
+                s1.TauxCS = 0.27m;
 
-            Salarie s2 = new Salarie("Cousine", "Mylene", "22LFG75")
-            { DateNaissance = new DateTime(1975, 05, 22), SalaireBrut = 2200m, TauxCS = 0.25m };
+                Salarie s2 = new Salarie("Cousine", "Mylene", "22LFG75")
+                { DateNaissance = new DateTime(1975, 05, 22), SalaireBrut = 2200m, TauxCS = 0.25m };
 
-            Salarie s3 = new Salarie("Tonton", "Jojo", "89DFG72")
-            { DateNaissance = new DateTime(1999, 04, 26), SalaireBrut = 1800m, TauxCS = 0.22m };
+                Salarie s3 = new Salarie("Tonton", "Jojo", "89DFG72")
+                { DateNaissance = new DateTime(1999, 04, 26), SalaireBrut = 1800m, TauxCS = 0.22m };
 
-            Salarie s4 = new Salarie("Tante", "Jeanine", "72DTH45")
-            { DateNaissance = new DateTime(1994, 12, 25),  TauxCS = 0.32m };
+                Salarie s4 = new Salarie("Tante", "Jeanine", "72DTH45")
+                { DateNaissance = new DateTime(1994, 12, 25), TauxCS = 0.32m };
 
-            Salarie s5 = new Salarie("Voisin","Florian","45FGL25")
-            { DateNaissance = new DateTime(1989, 5, 21), SalaireBrut = 1800m, TauxCS = 0.30m };
+                Salarie s5 = new Salarie("Voisin", "Florian", "45FGL25")
+                { DateNaissance = new DateTime(1989, 5, 21), SalaireBrut = 1800m, TauxCS = 0.30m };
 
-            Commercial c1 = new Commercial(s5)
-            { ChiffreAffaire =150000m, Commission = 0.01m };
+                Commercial c1 = new Commercial(s5)
+                { ChiffreAffaire = 150000m, Commission = 0.01m };
+
+
+
+                //Salaries listSalarie = new Salaries() {};
+                Salaries listSalarie = new Salaries() { s1, s2, s3, c1, s4 };
+                Salaries listSalaries = new Salaries();
+
+                /***Gestion en csv*****/
+                //listSalarie.SaveText("salaries.csv");
+                //listSalaries.LoadText("salaries.csv",1);
+
+                /*****gestion en binaire ****/
+                //listSalarie.SaveBinary("salaries.dat");
+                //listSalaries.LoadBinary("salaries.dat");
+
+                /*****gestion en xml ****/
+                //listSalarie.SaveXml("salaries.xml");
+                //listSalaries.LoadXml("salaries.xml");
+
+                /**** gestion en json avec Newtonsolft ****/
+                listSalarie.SaveJson("salaries.txt");
+                listSalaries.LoadJson("salaries.txt");
+
+                int i = 0;
+                foreach (Salarie item in listSalaries)
+                {
+                    Debug.WriteLine($"{item.ToString()}");
+                    Debug.WriteLine($"{listSalarie[i].ToString()}");
+                    Debug.WriteLine($"Egalité entre les objects {object.Equals(item, listSalarie[i])}");
+                    //Debug.WriteLine(item.ToString());
+                    i++;
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
             
-
-
-            //Salaries listSalarie = new Salaries() {};
-            Salaries listSalarie = new Salaries() { s1, s2, s3, c1, s4 };
-            Salaries listSalaries = new Salaries();
-
-            /***Gestion en csv*****/
-            //listSalarie.SaveText("salaries.csv");
-            //listSalaries.LoadText("salaries.csv",1);
-
-            /*****gestion en binaire ****/
-            //listSalarie.SaveBinary("salaries.dat");
-            //listSalaries.LoadBinary("salaries.dat");
-
-            /*****gestion en xml ****/
-            //listSalarie.SaveXml("salaries.xml");
-            //listSalaries.LoadXml("salaries.xml");
-
-            /**** gestion en json avec Newtonsolft ****/
-            listSalarie.SaveJson("salaries.txt");
-            listSalaries.LoadJson("salaries.txt");
-
-            foreach (Salarie item in listSalaries)
-            {
-                Debug.WriteLine(item.ToString());
-            }
-
-            foreach (Salarie item in listSalarie)
-            {
-                Debug.WriteLine(item.ToString());
-            }
+            
         }
         #endregion
 
@@ -200,6 +210,7 @@ namespace ConsoleSalarieTest
 
                 if (true)
                 {
+                    // tester le desdructeur de monde
                     Salarie s4 = new Salarie();
                 }
 

@@ -35,6 +35,7 @@ namespace SalarieDII
         {
 
         }
+
         public Commercial(string nom, string prenom, string matricule)
             : base(nom, prenom, matricule)
         {

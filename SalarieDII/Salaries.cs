@@ -188,7 +188,8 @@ namespace SalarieList
         }
 
         /// <summary>
-        /// méthode d'écriture dans un fichier json
+        /// méthode d'écriture dans un fichier json avec option setting
+        /// TypeNameHanding pour prendre en compte l'héritage
         /// </summary>
         /// <param name="path"></param>
         public void SaveJson ( string path )
@@ -199,6 +200,7 @@ namespace SalarieList
 
             //output.Serialize(jW, this, typeof(Salaries));
             
+            //mode coupe
             string preserveReferenacesAll = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
             {
                 //PreserveReferencesHandling = PreserveReferencesHandling.All,
@@ -206,6 +208,15 @@ namespace SalarieList
                 //TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full
             });
             output.Serialize(jW, preserveReferenacesAll);
+
+            //mode online one
+            //output.Serialize(jW, JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings
+            //{
+                ////PreserveReferencesHandling = PreserveReferencesHandling.All,
+             //   TypeNameHandling = TypeNameHandling.All,
+                ////TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full
+            //}));
+
             jW.Close();
             sW.Close();
         }
@@ -220,20 +231,29 @@ namespace SalarieList
             using StreamReader sR = new StreamReader(@path);
             using JsonReader jR = new JsonTextReader(sR);
 
-            //this.AddRange(input.Deserialize<Salaries>(jR));
-            //this.AddRange(input.Deserialize(jR,typeof(Salaries)) as Salaries);
-            
-            this.AddRange(JsonConvert.DeserializeObject<Salaries>
-                (input.Deserialize(jR).ToString(),
+            // mode découpe
+            string salDe = input.Deserialize(jR).ToString();
+            Salaries sal = JsonConvert.DeserializeObject<Salaries>
+                (salDe,
                 new JsonSerializerSettings()
                 {
                     //PreserveReferencesHandling = PreserveReferencesHandling.All,
                     TypeNameHandling = TypeNameHandling.All,
                     //TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full
-                }));
-            //Salarie sal = li.Extract("45FGL25");
-            //Commercial com = (Commercial)sal;
-            //Debug.WriteLine(com.ToString());
+                });
+
+            this.AddRange(sal);
+
+            // online one
+            //this.AddRange(JsonConvert.DeserializeObject<Salaries>
+            //    (input.Deserialize(jR).ToString(),
+            //    new JsonSerializerSettings()
+            //    {
+            //        //PreserveReferencesHandling = PreserveReferencesHandling.All,
+            //       TypeNameHandling = TypeNameHandling.All,
+            //        //TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Full
+            //    }));
+
             jR.Close();
             sR.Close();
         }

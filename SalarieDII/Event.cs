@@ -37,7 +37,6 @@ namespace SalarieDII
         private decimal _nouveauSalaire;
         private decimal _tauxChangement;
 
-        
         /// <summary>
         /// constructeur de la classe EventArgs
         /// </summary>
@@ -50,29 +49,12 @@ namespace SalarieDII
             this.NouveauSalaire = newSalary;
             this.TauxChangement = taux;
         }
-        
 
-        
         public decimal AncienSalaire { get => _ancienSalaire; set => _ancienSalaire = value; }
         public decimal TauxChangement { get => _tauxChangement; set => _tauxChangement = value; }
         public decimal NouveauSalaire { get => _nouveauSalaire; set => _nouveauSalaire = value; }
         public string NomPrenom { get => _nomPrenom; set => _nomPrenom = value; }
-
-        #endregion
     }
-
-    #region Event de gestion du compteur Static
-    public class EventCompteurEventArgs : EventArgs
-    {
-        private int _compteur;
-
-        public EventCompteurEventArgs(int compteur)
-        {
-            _compteur = compteur;
-        }
-
-        public int Compteur { get => _compteur; set => _compteur = value; }
-    }
-
     #endregion
+
 }
