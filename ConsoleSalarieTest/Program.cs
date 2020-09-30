@@ -232,7 +232,7 @@ namespace ConsoleSalarieTest
         /// <param name="e"></param>
         static void Salarie_EventSalary(object sender, EventSalaryEventArgs e)
         {
-            decimal différence = ((e.NouveauSalaire - e.AncienSalaire) / e.AncienSalaire) * 100;
+            decimal différence = ((e.NouveauSalaire - e.AncienSalaire) / e.AncienSalaire) * 100m;
             Debug.WriteLine($"Changement de salaire pour {e.NomPrenom}");
             Debug.WriteLine(string.Format($"Il y a une augmentation de {Math.Round(différence, 2)}%"));
             Debug.WriteLine($"ancien salaire {e.AncienSalaire}€ / nouveau salaire {e.NouveauSalaire}€");
