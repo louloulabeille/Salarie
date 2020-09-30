@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using SystemeUtilisateur;
 
@@ -12,7 +13,8 @@ namespace ConsoleAppTestUtilisateur
             //TestMotdePasse();
             //TestNomUtilisateur();
             //TestCourriel();
-            TestRole();
+            //TestRole();
+            TestUtilisateur();
         }
         #region Test Role
         static void TestRole()
@@ -57,9 +59,39 @@ namespace ConsoleAppTestUtilisateur
 
         static void TestUtilisateur ()
         {
+            try
+            {
+                Utilisateur u1 = new Utilisateur("loulou46", "azerty46") { IdUtil = "u1" };
+                Utilisateur u2 = new Utilisateur("loulou19", "azerty46") { IdUtil = "u2" };
+                Utilisateur u3 = new Utilisateur("louloulabeille", "46azerty") { IdUtil = "u3" };
+                Utilisateur u4 = new Utilisateur("florian19", "nbv19cxw") { IdUtil = "u4" };
+                Utilisateurs uS = new Utilisateurs();
+                uS.Add(u1);
+                uS.Add(u2);
+                uS.Add(u3);
+                uS.Add(u4);
 
+                uS.SaveJson();
+                Utilisateurs uS1 = new Utilisateurs();
+                uS1.LoadJson();
+                foreach (Utilisateur item in uS)
+                {
+                    Debug.WriteLine(item.ToString());
+                }
+                Debug.Write("\n");
+                foreach (Utilisateur item in uS1)
+                {
+                    Debug.WriteLine(item.ToString());
+                }
+
+            }
+            catch(ApplicationException e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
 
+        #region TestNomUtilisateur
         static void TestNomUtilisateur ()
         {
             try
@@ -76,6 +108,9 @@ namespace ConsoleAppTestUtilisateur
                 Debug.WriteLine(e.Message);
             }
         }
+        #endregion
+
+        #region Test du mot de passe
         static void TestMotdePasse()
         {
             try
@@ -93,7 +128,9 @@ namespace ConsoleAppTestUtilisateur
                 Debug.WriteLine(e.Message);
             }
         }
+        #endregion
 
+        #region test de l'adresse mail
         static void TestCourriel()
         {
             try
@@ -112,5 +149,6 @@ namespace ConsoleAppTestUtilisateur
                 Debug.WriteLine(e.Message);
             }
         }
+        #endregion
     }
 }

@@ -68,6 +68,9 @@ namespace SystemeUtilisateur
                 {
                     TypeNameHandling = TypeNameHandling.All
                 }));
+                jW.Close();
+                tw.Close();
+
                 return true;
             } catch( JsonException e )
             {
@@ -93,7 +96,9 @@ namespace SystemeUtilisateur
                     {
                         TypeNameHandling = TypeNameHandling.All
                     }));
-               
+
+                jR.Close();
+                sR.Close();
 
                 return true;
             }catch (JsonException e)

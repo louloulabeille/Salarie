@@ -1,4 +1,4 @@
-﻿<Window x:Class="WpfGestionMdiApplication.MainWindow"
+﻿<Window x:Name="Gestion_des_salaries" x:Class="WpfGestionMdiApplication.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,8 +8,7 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="169*"/>
-            <ColumnDefinition Width="95*"/>
+            <ColumnDefinition Width="131*"/>
         </Grid.ColumnDefinitions>
 
     </Grid>

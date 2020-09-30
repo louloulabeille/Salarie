@@ -74,8 +74,16 @@ namespace SystemeUtilisateur
 
         public bool IsVerifCourriel ( string courriel )
         {
-            Regex rgx = new Regex(_patterMail);
-            return rgx.IsMatch(courriel);
+            if (string.IsNullOrEmpty(courriel))
+            {
+                return true;
+            }
+            else
+            {
+                Regex rgx = new Regex(_patterMail);
+                return rgx.IsMatch(courriel);
+            }
+            
         }
 
         public bool IsVerifNomUtil ( string nomUtil )
@@ -90,7 +98,7 @@ namespace SystemeUtilisateur
         public override bool Equals(object obj)
         {
             return obj is Utilisateur util &&
-                this.NomUtil == this.NomUtil;
+                this.NomUtil == util.NomUtil;
         }
 
         public override int GetHashCode()
