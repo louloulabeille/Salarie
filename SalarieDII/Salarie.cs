@@ -81,7 +81,9 @@ namespace SalarieDII
         public string Matricule { get => this._matricule;
             set
             {
-                this._matricule = IsVerifMatricule(value) ? value : throw new Exception(string.Format($"La saisie du matricule est incorect, il doit être de forme '12DFG15' et vous avez saisie '{value}'. "));
+                this._matricule = IsVerifMatricule(value) ? value : 
+                    throw new ApplicationException(
+                        string.Format($"La saisie du matricule est incorect, il doit être de forme '12DFG15' et vous avez saisie '{value}'.s"));
             }
         }
 
@@ -92,7 +94,7 @@ namespace SalarieDII
                 {
                     OnEventNameNickName(this, new EventNameNickNameEventArgs(this.Nom, this.Prenom, value, this.Prenom));
                 }
-                this._nom = IsVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du nom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
+                this._nom = IsVerifNomPrenom(value) ? value : throw new ApplicationException(string.Format($"La saisie du nom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
         public string Prenom { get => this._prenom;
@@ -102,7 +104,7 @@ namespace SalarieDII
                 {
                     OnEventNameNickName(this, new EventNameNickNameEventArgs(this.Nom, this.Prenom, this.Nom, value));
                 }
-                this._prenom = IsVerifNomPrenom(value) ? value : throw new Exception(string.Format($"La saisie du prénom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
+                this._prenom = IsVerifNomPrenom(value) ? value : throw new ApplicationException(string.Format($"La saisie du prénom est incorect, il doit comporter de 3 à 30 caractères non décimal et vous avez saisie '{value}'. "));
             }
         }
         public decimal SalaireBrut
@@ -122,11 +124,7 @@ namespace SalarieDII
         public decimal TauxCS { get => this._tauxCS;
             set
             {
-                // ajout d'un évènement quand modification du salaire brute pour afficher l'ancien
-                // salaire et taux d'augmentation
-
-                // enregistrement
-                this._tauxCS = IsVerifTaux(value) ? value : throw new Exception(string.Format($"La saisie du taux est invalide, il doit être compris entre {_minTaux} et {_maxTaux}."));
+                this._tauxCS = IsVerifTaux(value) ? value : throw new SalarieException("id235",string.Format($"La saisie du taux est invalide, il doit être compris entre {_minTaux} et {_maxTaux}."),new Exception());
             }
         }
         public DateTime DateNaissance { get => this._dateNaissance;

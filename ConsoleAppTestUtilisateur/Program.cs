@@ -57,6 +57,7 @@ namespace ConsoleAppTestUtilisateur
 
         #endregion
 
+        #region Test Utilisateur
         static void TestUtilisateur ()
         {
             try
@@ -90,6 +91,7 @@ namespace ConsoleAppTestUtilisateur
                 Debug.WriteLine(e.Message);
             }
         }
+        #endregion
 
         #region TestNomUtilisateur
         static void TestNomUtilisateur ()

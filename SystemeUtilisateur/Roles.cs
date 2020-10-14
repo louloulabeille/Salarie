@@ -9,6 +9,7 @@ namespace SystemeUtilisateur
     /// <summary>
     /// classe de gestion des roles pour un utilisateur
     /// </summary>
+    [Serializable()]
     public class Roles : List<Role>
     {
         //adresse et nom du fichier des roles

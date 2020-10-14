@@ -9,6 +9,7 @@ namespace SystemeUtilisateur
     /// <summary>
     ///  classe de liste d'utilisateur
     /// </summary>
+    [Serializable()]
     public class Utilisateurs : List<Utilisateur>
     {
         protected const string _path = "utilisateurs.json";

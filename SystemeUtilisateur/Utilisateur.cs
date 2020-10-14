@@ -7,6 +7,7 @@ namespace SystemeUtilisateur
     /// Classe utilisateur poour la gestion du mot de passe
     /// et utilisateur
     /// </summary>
+    [Serializable()]
     public class Utilisateur
     {
         private string _idUtil;

@@ -87,11 +87,22 @@ namespace ConsoleSalarieTest
             //Console.ReadLine();
 
             // méthode de test des méthodes io de la classe Salaries (classe de typage List<Salarie>)
-            TestIoFichier();
+            //TestIoFichier();
 
 
             // méthode de test pour la gestion des délégué
-            TestEvenement();
+            //TestEvenement();
+            try
+            {
+                TestException(0);
+            } catch ( ArgumentNullException aNE)
+            {
+                Debug.WriteLine(aNE.Message);
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
 
         #region méthode de test des entré sortie
@@ -259,6 +270,32 @@ namespace ConsoleSalarieTest
         static void Salarie_EventCompteur(object sender, EventArgs e)
         {
             Debug.WriteLine($"Voici le nombre de salarie ouvert {Salarie.Compteur}");
+        }
+        #endregion
+
+        #region test des Exception
+        static void TestException (int  option)
+        {
+            if ( option == 0 ) // -- option 0 on laisse propager les exception
+            {
+                try
+                {
+                    Salarie s1 = new Salarie();
+                    s1.Matricule = "24fds4g4s5g456s4g65s4g6s6g46s";
+                    
+                }
+                catch (ApplicationException aE)
+                {
+                    Debug.WriteLine($"{aE.Message} \n Application : {aE.Source} " +
+                        $"\n Fonction : {aE.TargetSite} \n Pile : {aE.StackTrace}");
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine($"{e.Message} \n Application : {e.Source} " +
+                        $"\n Fonction : {e.TargetSite} \n Pile : {e.StackTrace}");
+                }
+            }
+            
         }
         #endregion
     }

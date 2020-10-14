@@ -4,6 +4,7 @@ using System.Text;
 
 namespace SystemeUtilisateur
 {
+    [Serializable()]
     public class Role
     {
         private string _idUtil;
